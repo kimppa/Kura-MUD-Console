@@ -26,6 +26,7 @@ public class ConsoleSampleApplication extends Application {
 
     @Override
     public void init() {
+        setTheme("console");
         Window mainWindow = new Window("Vaadin Console Demo");
         setMainWindow(mainWindow);
 
@@ -52,6 +53,7 @@ public class ConsoleSampleApplication extends Application {
         console.setGreeting("Welcome to Vaadin console demo.");
         console.reset();
         console.focus();
+        console.addStyle("r", "red");
 
         // Publish the methods in the Console class itself for testing purposes.
         console.addCommandProvider(inspector = new ObjectInspector(console));

@@ -373,7 +373,9 @@ public class TextConsole extends FocusWidget {
     }
 
     private Node createTextNode(final String text) {
-        return Document.get().createTextNode(text);
+        Element element = Document.get().createElement("span");
+        element.setInnerHTML(text);
+        return element;
     }
 
     private Node createBr() {

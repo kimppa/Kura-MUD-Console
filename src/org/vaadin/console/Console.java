@@ -697,4 +697,12 @@ public class Console extends AbstractComponent implements Component.Focusable {
         return Collections.unmodifiableSet(res);
     }
 
+    public void addStyle(String tagName, String style) {
+        client.addStyle(tagName, style);
+    }
+
+    public void removeStyle(String tagName) {
+        client.removeStyle(tagName);
+    }
+
 }

@@ -2,6 +2,7 @@ package org.vaadin.console.util;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,8 @@ public class ServerCommUtils implements Serializable {
     private boolean pendingClientInit;
     private Object[] clientInitParams;
     private boolean initSent;
+
+    private Map<String, String> styles = new HashMap<String, String>();
 
     public interface CallableComponent extends Serializable {
 
@@ -141,6 +144,7 @@ public class ServerCommUtils implements Serializable {
     private void paintCallParameter(PaintTarget target, Object p, int pi)
             throws PaintException {
         if (p instanceof String) {
+            p = replaceTags(p.toString());
             target.addAttribute("p" + pi, (String) p);
             target.addAttribute("pt" + pi, PARAM_STRING);
         } else if (p instanceof Float) {
@@ -208,4 +212,26 @@ public class ServerCommUtils implements Serializable {
         }
     }
 
+    public void addStyle(String tagName, String style) {
+        styles.put(tagName, style);
+    }
+
+    public void removeStyle(String tagName) {
+        styles.remove(tagName);
+    }
+
+    private String replaceTags(String string) {
+        for (String tagName : styles.keySet()) {
+            String startTag = "\\[" + tagName + "\\]";
+            String startTagReplacement = "<span class=\"" + styles.get(tagName)
+                    + "\">";
+            string = string.replaceAll(startTag, startTagReplacement);
+
+            String endTag = "\\[/" + tagName + "\\]";
+            String endTagReplacement = "</span>";
+            string = string.replaceAll(endTag, endTagReplacement);
+        }
+
+        return string;
+    }
 }
