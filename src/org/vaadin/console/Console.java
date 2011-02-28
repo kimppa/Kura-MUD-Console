@@ -45,6 +45,8 @@ public class Console extends AbstractComponent implements Component.Focusable {
     private static final int MAX_COLS = 500;
     private static final int MAX_ROWS = 200;
 
+    private final Set<String> commandAliases = new HashSet<String>();
+
     public boolean isWrap() {
         return config.wrap;
     }
@@ -620,7 +622,27 @@ public class Console extends AbstractComponent implements Component.Focusable {
      * {@link CommandProvider}.
      */
     public void addCommand(final String name, final Command cmd) {
+        addCommand(name, cmd, false);
+    }
+
+    /**
+     * Add a Command to this Console.
+     * 
+     * This will override the any commands of the same name available via
+     * {@link CommandProvider}.
+     */
+    public void addCommand(final String name, final Command cmd, boolean isAlias) {
         commands.put(name, cmd);
+
+        if (isAlias) {
+            commandAliases.add(name);
+        }
+    }
+
+    public Set<String> getCommandNames() {
+        Set<String> commandNames = new HashSet<String>(commands.keySet());
+        commandNames.removeAll(commandAliases);
+        return commandNames;
     }
 
     /**
